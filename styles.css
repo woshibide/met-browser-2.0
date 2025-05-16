@@ -1,0 +1,45 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    background-color: #000;
+}
+
+/* additional styles beyond what's in the embedded css */
+@media (max-width: 768px) {
+    .info-panel {
+        flex-direction: column !important;
+    }
+    
+    .item-info, .category-selector {
+        max-width: 100% !important;
+    }
+}
+
+/* transitions for smoother experience */
+.image-container img {
+    transition: opacity 0.3s ease;
+}
+
+.nav-left, .nav-right {
+    transition: background-color 0.2s ease;
+}
+
+.category-item {
+    transition: background-color 0.2s ease;
+}
+
+/* touch-friendly adjustments */
+@media (pointer: coarse) {
+    .nav-left, .nav-right {
+        width: 80px;
+    }
+    
+    .category-item {
+        padding: 8px 12px;
+        margin: 6px;
+    }
+}

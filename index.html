@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>египетская коллаба</title>
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        .egypt-gallery {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            color: #fff;
+        }
+        
+        .gallery-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .nav-controls {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+        
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 100%;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        
+        .nav-left:hover, .nav-right:hover {
+            color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .info-panel {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2;
+        }
+        
+        .item-info {
+            padding: 20px;
+            max-width: 60%;
+        }
+        
+        .item-info h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.5rem;
+        }
+        
+        .item-info p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .object-id {
+            font-size: 0.8rem !important;
+            opacity: 0.5 !important;
+        }
+        
+        .image-counter {
+            font-size: 0.8rem !important;
+            opacity: 0.7 !important;
+            margin-top: 15px !important;
+        }
+        
+        .category-selector {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            align-items: flex-start;
+            align-content: flex-start;
+            max-width: 40%;
+        }
+        
+        .category-label {
+            width: 100%;
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-bottom: 10px;
+        }
+        
+        .category-item {
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        
+        .category-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .category-item.active {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .no-image {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+    </style>
+    
+</head>
+    <body>
+        
+    <div class="egypt-gallery">
+        <div class="gallery-view">
+            <div class="image-container"></div>
+            <div class="nav-controls">
+                <div class="nav-left">&lt;</div>
+                <div class="nav-right">&gt;</div>
+            </div>
+        </div>
+        <div class="info-panel">
+            <div class="item-info"></div>
+            <div class="category-selector"></div>
+        </div>
+    </div>
+    
+    <script>
+    // gallery data
+    const galleryData = {"papyrus_Egypt": [{"object_id": "551786", "title": "Book of the Dead of the Priest of Horus, Imhotep (Imuthes)", "date": "ca. 332\u2013200 B.C.", "materials": "Papyrus, ink", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Papyrus, funerary, Book of the Dead, Imouthes, Imhotep, Imuthes", "measurements": "[{'elementName': 'Framed', 'elementDescription': 'Frame 2', 'elementMeasurements': {'Height': 38.2, 'Width': 150.3}}, {'elementName': 'Overall', 'elementDescription': 'Approximate measurements', 'elementMeasurements': {'Depth': 1920.2439, 'Height': 35, 'Length': 2190}}, {'elementName': 'Overall', 'elementDescription': 'Measurement from 2016 reinstallation (EMF/JK)', 'elementMeasurements': {'Height': 35.24257, 'Length': 2190}}, {'elementName': 'Framed', 'elementDescription': 'Frame 1', 'elementMeasurements': {'Height': 38.2, 'Width': 89.5}}, {'elementName': 'Framed', 'elementDescription': 'Frame 6', 'elementMeasurements': {'Height': 38.2, 'Width': 148}}, {'elementName': 'Framed', 'elementDescription': 'Frame 5', 'elementMeasurements': {'Height': 38.2, 'Width': 608.6}}, {'elementName': 'Framed', 'elementDescription': 'Frame 4', 'elementMeasurements': {'Height': 38.2, 'Width': 594.4}}, {'elementName': 'Framed', 'elementDescription': 'Frame 3', 'elementMeasurements': {'Height': 38.2, 'Width': 606.7}}]", "classification": "", "category": "papyrus_Egypt", "images": ["2-35.9.20a\u2013w_EGDP014589-4594.webp", "35.9.20a_w_Section1.webp", "35.9.20a_w_Section2.webp", "35.9.20a_w_Section3.webp", "35.9.20a_w_Section4.webp", "35.9.20a_w_Section5.webp", "35.9.20a_w_Section6.webp", "35.9.20a_w_Section7.webp", "35.9.20a_w_Section8.webp", "35.9.20a_w_Section9.webp", "35.9.20a_w_Section10.webp", "35.9.20a_w_Section11.webp", "35.9.20a_w_Section12.webp", "35.9.20a_w_Section13.webp", "35.9.20a_w_Section14.webp", "LC-35_9_20_Crocodiles.webp", "LC-35_9_20_Solar_Cycle.webp"]}, {"object_id": "570698", "title": "Bes on a column holding a knife", "date": "664\u201330 B.C.", "materials": "Cupreous metal", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Figurine, Bes, column", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Depth': 1.5, 'Height': 9.7, 'Width': 2.5}}]", "classification": "", "category": "papyrus_Egypt", "images": ["21.6.90_001.webp", "21.6.90_002.webp", "21.6.90_003.webp", "21.6.90_004.webp"]}], "hieratic_Egypt": [{"object_id": "551786", "title": "Book of the Dead of the Priest of Horus, Imhotep (Imuthes)", "date": "ca. 332\u2013200 B.C.", "materials": "Papyrus, ink", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Papyrus, funerary, Book of the Dead, Imouthes, Imhotep, Imuthes", "measurements": "[{'elementName': 'Framed', 'elementDescription': 'Frame 2', 'elementMeasurements': {'Height': 38.2, 'Width': 150.3}}, {'elementName': 'Overall', 'elementDescription': 'Approximate measurements', 'elementMeasurements': {'Depth': 1920.2439, 'Height': 35, 'Length': 2190}}, {'elementName': 'Overall', 'elementDescription': 'Measurement from 2016 reinstallation (EMF/JK)', 'elementMeasurements': {'Height': 35.24257, 'Length': 2190}}, {'elementName': 'Framed', 'elementDescription': 'Frame 1', 'elementMeasurements': {'Height': 38.2, 'Width': 89.5}}, {'elementName': 'Framed', 'elementDescription': 'Frame 6', 'elementMeasurements': {'Height': 38.2, 'Width': 148}}, {'elementName': 'Framed', 'elementDescription': 'Frame 5', 'elementMeasurements': {'Height': 38.2, 'Width': 608.6}}, {'elementName': 'Framed', 'elementDescription': 'Frame 4', 'elementMeasurements': {'Height': 38.2, 'Width': 594.4}}, {'elementName': 'Framed', 'elementDescription': 'Frame 3', 'elementMeasurements': {'Height': 38.2, 'Width': 606.7}}]", "classification": "", "category": "hieratic_Egypt", "images": ["2-35.9.20a\u2013w_EGDP014589-4594.webp", "35.9.20a_w_Section1.webp", "35.9.20a_w_Section2.webp", "35.9.20a_w_Section3.webp", "35.9.20a_w_Section4.webp", "35.9.20a_w_Section5.webp", "35.9.20a_w_Section6.webp", "35.9.20a_w_Section7.webp", "35.9.20a_w_Section8.webp", "35.9.20a_w_Section9.webp", "35.9.20a_w_Section10.webp", "35.9.20a_w_Section11.webp", "35.9.20a_w_Section12.webp", "35.9.20a_w_Section13.webp", "35.9.20a_w_Section14.webp", "LC-35_9_20_Crocodiles.webp", "LC-35_9_20_Solar_Cycle.webp"]}], "letter_Egypt": [{"object_id": "544740", "title": "Yuny and His Wife Renenutet", "date": "ca. 1294\u20131279 B.C.", "materials": "Limestone, paint", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Statue, Yuny, Renenutet, pair, menat, music", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Depth': 73, 'Height': 84.5, 'Width': 54.5}}]", "classification": "", "category": "letter_Egypt", "images": ["DT549.webp", "15.2.1_227910.webp", "15.2.1_227911.webp", "15.2.1_03.webp"]}], "painting_Egypt": [{"object_id": "544740", "title": "Yuny and His Wife Renenutet", "date": "ca. 1294\u20131279 B.C.", "materials": "Limestone, paint", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Statue, Yuny, Renenutet, pair, menat, music", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Depth': 73, 'Height': 84.5, 'Width': 54.5}}]", "classification": "", "category": "painting_Egypt", "images": ["DT549.webp", "15.2.1_227910.webp", "15.2.1_227911.webp", "15.2.1_03.webp"]}, {"object_id": "590874", "title": "Tomb Chapel of Raemkai", "date": "ca. 2446\u20132389 B.C.", "materials": "Limestone, paint", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Relief, tomb chapel, Raemkai, offerings, estates, agriculture, hunt, clapnet", "measurements": "[{'elementName': 'Other', 'elementDescription': 'Entrance corridor', 'elementMeasurements': {'Depth': 137, 'Width': 55}}, {'elementName': 'Overall', 'elementDescription': 'Chapel', 'elementMeasurements': {'Depth': 117, 'Height': 213.36043, 'Width': 434}}]", "classification": "", "category": "painting_Egypt", "images": ["Gallery_102_3623.webp", "08.202.1_TextsNeferiretnes.webp", "Gallery_102_3626.webp", "DP107720.webp", "08.201.1-plan.webp", "EG606.webp", "EG603.webp", "EG604.webp", "EG594.webp", "EG599.webp", "EG600.webp", "EG596.webp", "EG595.webp", "EG607.webp", "EG548.webp", "EG549.webp", "EG550.webp", "EG551.webp", "EG560.webp", "EG552.webp", "EG554.webp", "EG563.webp", "EG555.webp", "EG556.webp", "EG557.webp", "EG559.webp", "EG561.webp", "EG558.webp", "EG562.webp", "EG564.webp", "EG609.webp", "EG565.webp", "EG566.webp", "EG568.webp", "EG569.webp", "EG570.webp", "EG571.webp", "EG574.webp", "EG575.webp", "EG576.webp", "EG578.webp", "EG579.webp", "EG548-h.webp", "EG577.webp", "EG608.webp", "EG582.webp", "EG583.webp", "EG584.webp", "EG586.webp", "EG587.webp", "EG588.webp", "EG589.webp", "EG590.webp", "EG591.webp", "EG592.webp", "EG593.webp"]}, {"object_id": "544320", "title": "Stela of the Steward Mentuwoser", "date": "ca. 1944 B.C.", "materials": "Limestone, paint", "culture": "", "place": "Northern Upper Egypt", "department": "Egyptian Art", "object_name": "Stela, Mentuwoser", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Height': 103, 'Thickness': 8.3, 'Weight': 117.02803, 'Width': 50.5}}]", "classification": "", "category": "painting_Egypt", "images": ["DP322064.webp", "DP322065.webp", "DP322066.webp", "DT527.webp"]}], "relief_Egypt": [{"object_id": "590874", "title": "Tomb Chapel of Raemkai", "date": "ca. 2446\u20132389 B.C.", "materials": "Limestone, paint", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Relief, tomb chapel, Raemkai, offerings, estates, agriculture, hunt, clapnet", "measurements": "[{'elementName': 'Other', 'elementDescription': 'Entrance corridor', 'elementMeasurements': {'Depth': 137, 'Width': 55}}, {'elementName': 'Overall', 'elementDescription': 'Chapel', 'elementMeasurements': {'Depth': 117, 'Height': 213.36043, 'Width': 434}}]", "classification": "", "category": "relief_Egypt", "images": ["Gallery_102_3623.webp", "08.202.1_TextsNeferiretnes.webp", "Gallery_102_3626.webp", "DP107720.webp", "08.201.1-plan.webp", "EG606.webp", "EG603.webp", "EG604.webp", "EG594.webp", "EG599.webp", "EG600.webp", "EG596.webp", "EG595.webp", "EG607.webp", "EG548.webp", "EG549.webp", "EG550.webp", "EG551.webp", "EG560.webp", "EG552.webp", "EG554.webp", "EG563.webp", "EG555.webp", "EG556.webp", "EG557.webp", "EG559.webp", "EG561.webp", "EG558.webp", "EG562.webp", "EG564.webp", "EG609.webp", "EG565.webp", "EG566.webp", "EG568.webp", "EG569.webp", "EG570.webp", "EG571.webp", "EG574.webp", "EG575.webp", "EG576.webp", "EG578.webp", "EG579.webp", "EG548-h.webp", "EG577.webp", "EG608.webp", "EG582.webp", "EG583.webp", "EG584.webp", "EG586.webp", "EG587.webp", "EG588.webp", "EG589.webp", "EG590.webp", "EG591.webp", "EG592.webp", "EG593.webp"]}, {"object_id": "544740", "title": "Yuny and His Wife Renenutet", "date": "ca. 1294\u20131279 B.C.", "materials": "Limestone, paint", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Statue, Yuny, Renenutet, pair, menat, music", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Depth': 73, 'Height': 84.5, 'Width': 54.5}}]", "classification": "", "category": "relief_Egypt", "images": ["DT549.webp", "15.2.1_227910.webp", "15.2.1_227911.webp", "15.2.1_03.webp"]}, {"object_id": "544320", "title": "Stela of the Steward Mentuwoser", "date": "ca. 1944 B.C.", "materials": "Limestone, paint", "culture": "", "place": "Northern Upper Egypt", "department": "Egyptian Art", "object_name": "Stela, Mentuwoser", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Height': 103, 'Thickness': 8.3, 'Weight': 117.02803, 'Width': 50.5}}]", "classification": "", "category": "relief_Egypt", "images": ["DP322064.webp", "DP322065.webp", "DP322066.webp", "DT527.webp"]}], "horus": [{"object_id": "551786", "title": "Book of the Dead of the Priest of Horus, Imhotep (Imuthes)", "date": "ca. 332\u2013200 B.C.", "materials": "Papyrus, ink", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Papyrus, funerary, Book of the Dead, Imouthes, Imhotep, Imuthes", "measurements": "[{'elementName': 'Overall', 'elementDescription': 'Approximate measurements', 'elementMeasurements': {'Depth': 1920.2439, 'Height': 35, 'Length': 2190}}, {'elementName': 'Overall', 'elementDescription': 'Measurement from 2016 reinstallation (EMF/JK)', 'elementMeasurements': {'Height': 35.24257, 'Length': 2190}}, {'elementName': 'Framed', 'elementDescription': 'Frame 1', 'elementMeasurements': {'Height': 38.2, 'Width': 89.5}}, {'elementName': 'Framed', 'elementDescription': 'Frame 6', 'elementMeasurements': {'Height': 38.2, 'Width': 148}}, {'elementName': 'Framed', 'elementDescription': 'Frame 5', 'elementMeasurements': {'Height': 38.2, 'Width': 608.6}}, {'elementName': 'Framed', 'elementDescription': 'Frame 4', 'elementMeasurements': {'Height': 38.2, 'Width': 594.4}}, {'elementName': 'Framed', 'elementDescription': 'Frame 3', 'elementMeasurements': {'Height': 38.2, 'Width': 606.7}}, {'elementName': 'Framed', 'elementDescription': 'Frame 2', 'elementMeasurements': {'Height': 38.2, 'Width': 150.3}}]", "classification": "", "category": "horus", "images": ["2-35.9.20a\u2013w_EGDP014589-4594.webp", "35.9.20a_w_Section1.webp", "35.9.20a_w_Section2.webp", "35.9.20a_w_Section3.webp", "35.9.20a_w_Section4.webp", "35.9.20a_w_Section5.webp", "35.9.20a_w_Section6.webp", "35.9.20a_w_Section7.webp", "35.9.20a_w_Section8.webp", "35.9.20a_w_Section9.webp", "35.9.20a_w_Section10.webp", "35.9.20a_w_Section11.webp", "35.9.20a_w_Section12.webp", "35.9.20a_w_Section13.webp", "35.9.20a_w_Section14.webp", "LC-35_9_20_Crocodiles.webp", "LC-35_9_20_Solar_Cycle.webp"]}, {"object_id": "544740", "title": "Yuny and His Wife Renenutet", "date": "ca. 1294\u20131279 B.C.", "materials": "Limestone, paint", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Statue, Yuny, Renenutet, pair, menat, music", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Depth': 73, 'Height': 84.5, 'Width': 54.5}}]", "classification": "", "category": "horus", "images": ["DT549.webp", "15.2.1_227910.webp", "15.2.1_227911.webp", "15.2.1_03.webp"]}, {"object_id": "544320", "title": "Stela of the Steward Mentuwoser", "date": "ca. 1944 B.C.", "materials": "Limestone, paint", "culture": "", "place": "Northern Upper Egypt", "department": "Egyptian Art", "object_name": "Stela, Mentuwoser", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Height': 103, 'Thickness': 8.3, 'Weight': 117.02803, 'Width': 50.5}}]", "classification": "", "category": "horus", "images": ["DP322064.webp", "DP322065.webp", "DP322066.webp", "DT527.webp"]}], "gold_Egypt": [{"object_id": "444604", "title": "Tray", "date": "late 13th\u2013early 14th century", "materials": "Brass; engraved and inlaid with silver and black compound", "culture": "", "place": "Egypt", "department": "Islamic Art", "object_name": "Tray", "measurements": "[{'elementName': 'Other', 'elementDescription': None, 'elementMeasurements': {'Diameter': 76.8, 'Height': 3.81}}]", "classification": "Metal", "category": "gold_Egypt", "images": ["DP241056.webp", "wb-91.1.604.webp", "wb-91.1.604b.webp", "wb-91.1.604c.webp", "wb-91.1.604d.webp", "wb-91.1.604e.webp", "wb-91.1.604f.webp", "wb-91.1.604g.webp", "wb-91.1.604h.webp", "wb-91.1.604i.webp", "wb-91.1.604j.webp", "wb-91.1.604l.webp", "wb-91.1.604k.webp", "wb-91.1.604m.webp", "wb-91.1.604o.webp", "wb-91.1.604n.webp", "DP241082.webp", "DP-25749-006.webp", "DP-25749-005.webp", "DP-25749-004.webp", "DP-25749-003.webp", "DP-25749-002.webp", "DP-25749-001.webp", "DP203.webp", "DP22.webp"]}, {"object_id": "546747", "title": "Statuette of Osiris with the epithets Neb Ankh and Khentyimentiu, donated by Padihorpare", "date": "ca. 588\u2013526 BC", "materials": "Cupreous metal, gold leaf", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Statuette, Osiris, Padihorpere", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Depth': 4.2, 'Height': 29, 'Width': 6.2}}]", "classification": "", "category": "gold_Egypt", "images": ["56.16.2_EGDP022582.webp", "56.16.2_EGDP022583.webp", "56.16.2_EGDP022584.webp", "56.16.2_EGDP022585.webp", "56.16.2_EGDP022586.webp", "56.16.2_EGDP022587.webp"]}, {"object_id": "447006", "title": "Mosque Lamp of Amir Qawsun", "date": "ca. 1329\u201335", "materials": "Glass, colorless with brown tinge; blown, blown applied foot, enameled and gilded", "culture": "", "place": "Egypt", "department": "Islamic Art", "object_name": "Mosque lamp", "measurements": "[{'elementName': 'Other', 'elementDescription': 'Diam. with handles', 'elementMeasurements': {'Diameter': 26.1938}}, {'elementName': 'Other', 'elementDescription': 'Maximum Diameter', 'elementMeasurements': {'Diameter': 25.5588}}, {'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Height': 35.8776}}]", "classification": "Glass", "category": "gold_Egypt", "images": ["DP214293.webp", "DP214294.webp", "sf17-190-991b.webp", "DT2886.webp", "h1_17.190.991.webp", "DP214291.webp", "DP214292.webp", "sf17-190-991a.webp", "38884.webp"]}], "stela_Egypt": [{"object_id": "544320", "title": "Stela of the Steward Mentuwoser", "date": "ca. 1944 B.C.", "materials": "Limestone, paint", "culture": "", "place": "Northern Upper Egypt", "department": "Egyptian Art", "object_name": "Stela, Mentuwoser", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Height': 103, 'Thickness': 8.3, 'Weight': 117.02803, 'Width': 50.5}}]", "classification": "", "category": "stela_Egypt", "images": ["DP322064.webp", "DP322065.webp", "DP322066.webp", "DT527.webp"]}, {"object_id": "549236", "title": "Stela of Ptahmose", "date": "ca. 1320\u20131290 B.C.", "materials": "Limestone", "culture": "", "place": "Memphite Region", "department": "Egyptian Art", "object_name": "Stela, Ptahmose", "measurements": "[{'elementName': 'Other', 'elementDescription': None, 'elementMeasurements': {'Height': 142.24028}}]", "classification": "", "category": "stela_Egypt", "images": ["LC-67_3_EGDP028267.webp"]}], "clay_Egypt": [{"object_id": "544822", "title": "Jug Decorated with Dolphins and Birds", "date": "ca. 1750\u20131550 B.C.", "materials": "Pottery, manganese black, gypsum fill", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Jug, Dolphins", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Diameter': 14.9, 'Height': 15}}, {'elementName': 'Diam. of rim', 'elementDescription': None, 'elementMeasurements': {'Diameter': 4.7}}]", "classification": "", "category": "clay_Egypt", "images": ["DP350589.webp", "DP160416.webp", "DP160417.webp", "DP163942.webp"]}, {"object_id": "591138", "title": "Head of a lion", "date": "400\u2013300 B.C.", "materials": "Gypsum plaster", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Lion, head", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Height': 42.5, 'Weight': 17, 'Width': 40}}, {'elementName': 'Overall', 'elementDescription': 'weight with attached cleat', 'elementMeasurements': {'Weight': 17.009888}}]", "classification": "", "category": "clay_Egypt", "images": ["DP323402.webp", "2012.235_EGDP013853.webp", "2012.235_EGDP013857.webp", "2012.235_EGDP013846.webp", "2012.235_EGDP013842.webp", "2012.235_EGDP013886.webp"]}], "hieroglyphic_Egypt": [{"object_id": "544740", "title": "Yuny and His Wife Renenutet", "date": "ca. 1294\u20131279 B.C.", "materials": "Limestone, paint", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Statue, Yuny, Renenutet, pair, menat, music", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Depth': 73, 'Height': 84.5, 'Width': 54.5}}]", "classification": "", "category": "hieroglyphic_Egypt", "images": ["DT549.webp", "15.2.1_227910.webp", "15.2.1_227911.webp", "15.2.1_03.webp"]}, {"object_id": "544320", "title": "Stela of the Steward Mentuwoser", "date": "ca. 1944 B.C.", "materials": "Limestone, paint", "culture": "", "place": "Northern Upper Egypt", "department": "Egyptian Art", "object_name": "Stela, Mentuwoser", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Height': 103, 'Thickness': 8.3, 'Weight': 117.02803, 'Width': 50.5}}]", "classification": "", "category": "hieroglyphic_Egypt", "images": ["DP322064.webp", "DP322065.webp", "DP322066.webp", "DT527.webp"]}, {"object_id": "546747", "title": "Statuette of Osiris with the epithets Neb Ankh and Khentyimentiu, donated by Padihorpare", "date": "ca. 588\u2013526 BC", "materials": "Cupreous metal, gold leaf", "culture": "", "place": "Egypt", "department": "Egyptian Art", "object_name": "Statuette, Osiris, Padihorpere", "measurements": "[{'elementName': 'Overall', 'elementDescription': None, 'elementMeasurements': {'Depth': 4.2, 'Height': 29, 'Width': 6.2}}]", "classification": "", "category": "hieroglyphic_Egypt", "images": ["56.16.2_EGDP022582.webp", "56.16.2_EGDP022583.webp", "56.16.2_EGDP022584.webp", "56.16.2_EGDP022585.webp", "56.16.2_EGDP022586.webp", "56.16.2_EGDP022587.webp"]}]};
+    
+    // initialize gallery
+    document.addEventListener('DOMContentLoaded', function() {
+        // state variables
+        let currentCategory = Object.keys(galleryData)[0];
+        let currentItemIndex = 0;
+        let currentImageIndex = 0;
+        
+        // dom elements
+        const imageContainer = document.querySelector('.image-container');
+        const itemInfoPanel = document.querySelector('.item-info');
+        const categorySelector = document.querySelector('.category-selector');
+        const navLeft = document.querySelector('.nav-left');
+        const navRight = document.querySelector('.nav-right');
+        
+        // initialize category selector
+        function initCategorySelector() {
+            let html = '<div class="category-label">category:</div>';
+            Object.keys(galleryData).forEach(category => {
+                html += `<div class="category-item" data-category="${category}">${category}</div>`;
+            });
+            categorySelector.innerHTML = html;
+            
+            // add event listeners to category items
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    changeCategory(category);
+                });
+            });
+            
+            // highlight current category
+            updateCategoryHighlight();
+        }
+        
+        // update category highlight
+        function updateCategoryHighlight() {
+            document.querySelectorAll('.category-item').forEach(item => {
+                if (item.getAttribute('data-category') === currentCategory) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+        
+        // change category
+        function changeCategory(category) {
+            if (galleryData[category] && galleryData[category].length > 0) {
+                currentCategory = category;
+                currentItemIndex = 0;
+                currentImageIndex = 0;
+                updateCategoryHighlight();
+                displayCurrentItem();
+            }
+        }
+        
+        // display current item
+        function displayCurrentItem() {
+            const items = galleryData[currentCategory];
+            if (items.length === 0) return;
+            
+            const item = items[currentItemIndex];
+            
+            // display image
+            if (item.images.length > 0) {
+                const imgPath = `content/${currentCategory}_images/${item.object_id}_${item.images[currentImageIndex]}`;
+                imageContainer.innerHTML = `<img src="${imgPath}" alt="${item.title}">`;
+            } else {
+                imageContainer.innerHTML = '<div class="no-image">No image available</div>';
+            }
+            
+            // display info
+            let infoHtml = `
+                <h2>${item.title}</h2>
+                <p class="object-id">ID: ${item.object_id}</p>
+                <p>${item.date}</p>
+                <p>${item.materials}</p>
+                <p>${item.object_name}</p>
+                <p>${item.place}</p>
+                <p class="image-counter">${currentImageIndex + 1}/${item.images.length}</p>
+            `;
+            itemInfoPanel.innerHTML = infoHtml;
+        }
+        
+        // next image
+        function nextImage() {
+            const item = galleryData[currentCategory][currentItemIndex];
+            if (item.images.length === 0) return;
+            
+            currentImageIndex = (currentImageIndex + 1) % item.images.length;
+            displayCurrentItem();
+        }
+        
+        // previous image
+        function prevImage() {
+            const item = galleryData[currentCategory][currentItemIndex];
+            if (item.images.length === 0) return;
+            
+            currentImageIndex = (currentImageIndex - 1 + item.images.length) % item.images.length;
+            displayCurrentItem();
+        }
+        
+        // next item
+        function nextItem() {
+            const items = galleryData[currentCategory];
+            currentItemIndex = (currentItemIndex + 1) % items.length;
+            currentImageIndex = 0;
+            displayCurrentItem();
+        }
+        
+        // previous item
+        function prevItem() {
+            const items = galleryData[currentCategory];
+            currentItemIndex = (currentItemIndex - 1 + items.length) % items.length;
+            currentImageIndex = 0;
+            displayCurrentItem();
+        }
+        
+        // initialize navigation
+        navLeft.addEventListener('click', prevImage);
+        navRight.addEventListener('click', nextImage);
+        
+        // enable keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                prevImage();
+            } else if (e.key === 'ArrowRight') {
+                nextImage();
+            } else if (e.key === 'ArrowUp') {
+                prevItem();
+            } else if (e.key === 'ArrowDown') {
+                nextItem();
+            }
+        });
+        
+        // initialize gallery
+        initCategorySelector();
+        displayCurrentItem();
+    });
+    </script>
+    
+</body>
+</html>
