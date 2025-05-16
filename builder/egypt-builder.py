@@ -153,7 +153,7 @@ def generate_gallery_html(data_by_category):
             
             // display image
             if (item.images.length > 0) {
-                const imgPath = `content/${currentCategory}_images/${item.object_id}_${item.images[currentImageIndex]}`;
+                const imgPath = `./content/${currentCategory}_images/${item.object_id}_${item.images[currentImageIndex]}`;
                 imageContainer.innerHTML = `<img src="${imgPath}" alt="${item.title}">`;
             } else {
                 imageContainer.innerHTML = '<div class="no-image">No image available</div>';
